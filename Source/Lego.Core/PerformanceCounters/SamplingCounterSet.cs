@@ -21,10 +21,5 @@ namespace Lego.PerformanceCounters
         }
 
         public string[] CounterPaths { get; set; }
-
-        //public IObservable<PerformanceSample> FromRealTime()
-        //{
-        //    return PerfCounterObservable.FromRealTime(SamplingRate, CounterPaths);
-        //}
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Serilog;
 
 namespace Lego.Messaging
 {
@@ -43,6 +44,9 @@ namespace Lego.Messaging
                 _fragmentSize = Math.Min((capacity + fragmentCount - 1) / fragmentCount, _maxFragmentSize);
                 _fragments = new Fragment[fragmentCount + 1]; // +1 for the overflow buffer
             }
+
+            int trueCapacity = (int)(_fragmentSize * _fragments.Length);
+            Log.Information("Capacity: {Capacity}", trueCapacity);
         }
 
         public MessageStore(uint capacity)

@@ -1,6 +1,11 @@
 ﻿using System;
+using Lego.Configuration;
+using Lego.PerformanceCounters;
+using Lego.Reporters;
+using Lego.Service.Configuration;
 using Microsoft.Practices.Unity;
 using Serilog;
+using Serilog.Events;
 using Serilog.Extras.Topshelf;
 using Topshelf;
 
@@ -25,15 +30,27 @@ namespace Lego.Service
         private static ILogger GetLogger()
         {
             ILogger logger = new LoggerConfiguration()
+                .WriteTo.Trace()
                 .WriteTo.ColoredConsole()
                 .CreateLogger();
 
+            Log.Logger = logger;
             return logger;
         }
 
         private static IUnityContainer GetContainer()
         {
-            return new UnityContainer();
+            UnityContainer container = new UnityContainer();
+
+            container.RegisterType<IGraphiteReporter, GraphiteReporter>();
+            container.RegisterType<IConfigurationProvider<GraphiteReporterConfiguration>, AppSettingsGraphiteReporterConfigurationProvider>();
+
+            container.RegisterType<IConfigurationProvider<CounterSetSourceCollection>, CounterSetSourceCollectionProvider>();
+            container.RegisterType<IPerformanceSampleMetricFormatter, PerformanceSampleMetricFormatter>();
+            //container.RegisterType<IPerformanceSampleMetricFormatCache, PerformanceSampleMetricFormatCache>();
+            container.RegisterType<IPerformanceSampleMetricFormatCache, PerformanceSampleMetricFormatCache>();
+           
+            return container;
         }
     }
 }

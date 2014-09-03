@@ -1,41 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
-using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Lego.Configuration;
-using Lego.Messaging;
+using Lego.PerformanceCounters;
+using Serilog;
 
 namespace Lego.Reporters
 {
-    public class GraphiteReporterConfiguration
+    public class GraphiteReporter : AbstractGraphiteReporter
     {
-        public string Host { get; set; }
-        public int Port { get; set; }
-
-        public int BufferSize { get; set; }
-
-        public int MaxMetricCount { get; set; }
-        
-        public TimeSpan FlushInterval { get; set; }
-    }
-
-    public interface IGraphiteReporter : IDisposable
-    {
-        
-    }
-
-    public class GraphiteReporter : IGraphiteReporter
-    {
-        private static MessageStore<Metric> _metricStore;
-        private ulong _cursor;
-
-        private readonly Timer _timer;
-
         private IConfigurationProvider<GraphiteReporterConfiguration> _configurationProvider;
         
         public GraphiteReporter(IConfigurationProvider<GraphiteReporterConfiguration> configurationProvider)
@@ -48,99 +24,44 @@ namespace Lego.Reporters
             _configurationProvider = configurationProvider;
             var configuration = _configurationProvider.GetConfiguration();
 
-            _metricStore = new MessageStore<Metric>((uint)configuration.BufferSize);
-            _cursor = 0;
-
-            _timer = new Timer(OnTimer, null, TimeSpan.Zero, configuration.FlushInterval);
+            Initialize(configuration);
         }
 
-        public void Publish(Metric metric)
+        protected override void Publish(ArraySegment<Metric> metrics)
         {
-            _metricStore.Add(metric);
-        }
-
-        public void OnTimer(object state)
-        {
-            MessageStoreResult<Metric> metrics;
-
-            do
+            if (metrics == null)
             {
-                metrics = _metricStore.GetMessages(_cursor, _maxMessages);
-                try
-                {
-                    Task publishTask = PublishAsync(metrics.Messages);
-                    publishTask.Wait();
-                    _cursor += (ulong)metrics.Messages.Count;
-                }
-                catch (Exception)
-                {
-                }
+                throw new ArgumentNullException("metrics");
+            }
 
-
-            } while (metrics.HasMoreData);
-        }
-
-
-        private async Task PublishAsync(ArraySegment<Metric> metrics)
-        {
             var configuration = _configurationProvider.GetConfiguration();
 
-            try
+            using (var client = new TcpClient())
             {
-                using (var client = new TcpClient())
+                client.Connect(configuration.Host, configuration.Port);
+
+                using (var stream = client.GetStream())
                 {
-                    //
-                    await client.ConnectAsync(configuration.Host, configuration.Port);
-                    using (var stream = client.GetStream())
-                    using (var writer = new StreamWriter(stream))
-                    {
-                        foreach (var metricString in MetricStrings(metrics))
-                        {
-                            await writer.WriteLineAsync(metricString);
-                        }
-
-                        writer.Flush(); // Flush and write our metrics.
-                        writer.Close();
-                        stream.Close();
-                    }
-
+                    WriteMetrics(stream, metrics);
                 }
-
             }
-            catch (Exception exception)
+
+            Log.Information("Wrote {Count} metrics to server {Host}:{Port}", metrics.Count, configuration.Host, configuration.Port);
+        }
+
+        private void WriteMetrics(Stream stream, ArraySegment<Metric> metrics)
+        {
+            using (var writer = new StreamWriter(stream))
             {
-                Trace.WriteLine("Error publishing metrics: " + exception.ToString());
+                foreach (var metric in metrics)
+                {
+                    writer.Write(metric.Key);
+                    writer.Write(' ');
+                    writer.Write(metric.Value);
+                    writer.Write(' ');
+                    writer.WriteLine(metric.UnixTime);
+                }
             }
-        }
-
-        private IEnumerable<string> MetricStrings(ArraySegment<Metric> metrics)
-        {
-            StringBuilder buffer = new StringBuilder();
-
-            for (int i = metrics.Offset; i < metrics.Offset + metrics.Count; i++)
-            {
-                var metric = metrics.Array[i];
-                yield return CreateMetric(buffer, metric);
-
-            }
-        }
-
-        private string CreateMetric(StringBuilder buffer, Metric metric)
-        {
-            buffer.Clear();
-            buffer.Append(metric.Key);
-            buffer.Append(' ');
-            buffer.Append(metric.Value);
-            buffer.Append(' ');
-            buffer.Append(metric.UnixTime);
-
-            return buffer.ToString();
-        }
-
-        public void Dispose()
-        {
-            // todo: we could trying publishing the last values in the queue
-            _timer.Dispose();
         }
     }
 }
