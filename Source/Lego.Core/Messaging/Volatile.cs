@@ -1,0 +1,14 @@
+using System.Threading;
+
+namespace Lego.Messaging
+{
+    // All methods here are guaranteed both volatile +  atomic.
+    // TODO: Make this use the .NET 4.5 'Volatile' type.
+    internal static class Volatile
+    {
+        public static long Read(ref long location)
+        {
+            return Interlocked.Read(ref location);
+        }
+    }
+}
