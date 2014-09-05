@@ -33,6 +33,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Metrics">
+      <HintPath>..\packages\Metrics.NET.0.1.11\lib\net451\Metrics.dll</HintPath>
+    </Reference>
     <Reference Include="Serilog">
       <HintPath>..\packages\Serilog.1.4.7\lib\net45\Serilog.dll</HintPath>
     </Reference>
@@ -74,9 +77,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\IConfigurationProvider.cs" />
+    <Compile Include="Counters.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\Int32Extensions.cs" />
     <Compile Include="Extensions\RegexExtensions.cs" />
+    <Compile Include="Graphite\Graphite.cs" />
+    <Compile Include="Graphite\GraphiteMetricsReporter.cs" />
+    <Compile Include="Graphite\IGraphite.cs" />
     <Compile Include="Messaging\MessageStore.cs" />
     <Compile Include="Messaging\MessageStoreResult.cs" />
     <Compile Include="Messaging\Volatile.cs" />

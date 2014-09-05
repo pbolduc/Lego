@@ -13,7 +13,7 @@ namespace Lego.Reporters
         private ulong _cursor;
         private Timer _timer;
         private int _maxMessages;
-
+        
         protected void Initialize(GraphiteReporterConfiguration configuration)
         {
             _maxMessages = configuration.MaxMetricCount;

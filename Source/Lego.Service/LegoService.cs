@@ -10,10 +10,10 @@ namespace Lego.Service
 {
     public class LegoService : ServiceControl
     {
-        private IGraphiteReporter _reporter;
         private List<IDisposable> _subscriptions = new List<IDisposable>();
         private CounterSetSourceCollection _counterSetSources;
         private IPerformanceSampleMetricFormatter _formatter;
+        private IGraphiteReporter _reporter;
 
         public LegoService(IGraphiteReporter reporter, 
             IConfigurationProvider<CounterSetSourceCollection> counterSetProvider,

@@ -24,12 +24,31 @@ namespace Lego.Service.Configuration
         {
             GraphiteReporterConfiguration configuration = new GraphiteReporterConfiguration();
 
-            configuration.Host = settings[GraphiteHost];
-            configuration.Port = Int32.Parse(settings[GraphitePort]);
-
             configuration.BufferSize = Int32.Parse(settings[BufferSize]);
             configuration.MaxMetricCount = Int32.Parse(settings[MaxMetricCount]);
             configuration.FlushInterval = TimeSpan.Parse(settings[FlushInterval]);
+
+            return configuration;
+        }
+    }
+
+
+    public class AppSettingsGraphiteConfigurationProvider : IConfigurationProvider<GraphiteConfiguration>
+    {
+        const string GraphiteHost = "lego:graphite:host";
+        const string GraphitePort = "lego:graphite:port";
+
+        public GraphiteConfiguration GetConfiguration()
+        {
+            return GetConfiguration(ConfigurationManager.AppSettings);
+        }
+
+        private GraphiteConfiguration GetConfiguration(NameValueCollection settings)
+        {
+            GraphiteConfiguration configuration = new GraphiteConfiguration();
+
+            configuration.Host = settings[GraphiteHost];
+            configuration.Port = Int32.Parse(settings[GraphitePort]);
 
             return configuration;
         }

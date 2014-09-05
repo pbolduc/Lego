@@ -16,7 +16,7 @@ namespace Lego.PerformanceCounters
         public Metric Get(PerformanceSample sample)
         {
             Metric metric = new Metric();
-            metric.Key = GetKey(sample);
+            metric.Name = GetKey(sample);
             metric.Value = sample.Value;
             metric.UnixTime = sample.Timestamp.ToUnixTime();
 

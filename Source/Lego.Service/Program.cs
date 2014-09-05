@@ -1,5 +1,6 @@
 ﻿using System;
 using Lego.Configuration;
+using Lego.Graphite;
 using Lego.PerformanceCounters;
 using Lego.Reporters;
 using Lego.Service.Configuration;
@@ -44,11 +45,19 @@ namespace Lego.Service
 
             container.RegisterType<IGraphiteReporter, GraphiteReporter>();
             container.RegisterType<IConfigurationProvider<GraphiteReporterConfiguration>, AppSettingsGraphiteReporterConfigurationProvider>();
+            container.RegisterType<IConfigurationProvider<GraphiteConfiguration>, AppSettingsGraphiteConfigurationProvider>();
 
             container.RegisterType<IConfigurationProvider<CounterSetSourceCollection>, CounterSetSourceCollectionProvider>();
             container.RegisterType<IPerformanceSampleMetricFormatter, PerformanceSampleMetricFormatter>();
-            //container.RegisterType<IPerformanceSampleMetricFormatCache, PerformanceSampleMetricFormatCache>();
             container.RegisterType<IPerformanceSampleMetricFormatCache, PerformanceSampleMetricFormatCache>();
+
+            container.RegisterType<IGraphite, Graphite.Graphite>(new InjectionFactory((c, t, name) =>
+            {
+                var provider = c.Resolve<IConfigurationProvider<GraphiteConfiguration>>();
+                var configuration = provider.GetConfiguration();
+                return new Graphite.Graphite(configuration.Host, configuration.Port);
+            }));
+            
            
             return container;
         }
