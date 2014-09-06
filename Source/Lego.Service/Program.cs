@@ -2,7 +2,6 @@
 using Lego.Configuration;
 using Lego.Graphite;
 using Lego.PerformanceCounters;
-using Lego.Reporters;
 using Lego.Service.Configuration;
 using Microsoft.Practices.Unity;
 using Serilog;
@@ -43,8 +42,8 @@ namespace Lego.Service
         {
             UnityContainer container = new UnityContainer();
 
-            container.RegisterType<IGraphiteReporter, GraphiteReporter>();
-            container.RegisterType<IConfigurationProvider<GraphiteReporterConfiguration>, AppSettingsGraphiteReporterConfigurationProvider>();
+            container.RegisterType<IGraphitePublisher, GraphitePublisher>();
+            container.RegisterType<IConfigurationProvider<GraphitePublisherConfiguration>, AppSettingsGraphiteReporterConfigurationProvider>();
             container.RegisterType<IConfigurationProvider<GraphiteConfiguration>, AppSettingsGraphiteConfigurationProvider>();
 
             container.RegisterType<IConfigurationProvider<CounterSetSourceCollection>, CounterSetSourceCollectionProvider>();
@@ -57,8 +56,7 @@ namespace Lego.Service
                 var configuration = provider.GetConfiguration();
                 return new Graphite.Graphite(configuration.Host, configuration.Port);
             }));
-            
-           
+                       
             return container;
         }
     }

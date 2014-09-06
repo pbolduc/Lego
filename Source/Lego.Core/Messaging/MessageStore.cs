@@ -12,6 +12,7 @@ namespace Lego.Messaging
     /// </remarks>
     public sealed class MessageStore<T> where T : class
     {
+        private static readonly uint _minCapacity = 32;
         private static readonly uint _minFragmentCount = 4;
         private static readonly uint _maxFragmentSize = (IntPtr.Size == 4) ? (uint)16384 : (uint)8192; // guarantees that fragments never end up in the LOH
         private static readonly ArraySegment<T> _emptyArraySegment = new ArraySegment<T>(new T[0]);
@@ -27,9 +28,9 @@ namespace Lego.Messaging
         public MessageStore(uint capacity, uint offset)
         {
             // set a minimum capacity
-            if (capacity < 32)
+            if (capacity < _minCapacity)
             {
-                capacity = 32;
+                capacity = _minCapacity;
             }
 
             _offset = offset;
@@ -44,14 +45,19 @@ namespace Lego.Messaging
                 _fragmentSize = Math.Min((capacity + fragmentCount - 1) / fragmentCount, _maxFragmentSize);
                 _fragments = new Fragment[fragmentCount + 1]; // +1 for the overflow buffer
             }
-
-            int trueCapacity = (int)(_fragmentSize * _fragments.Length);
-            Log.Information("Capacity: {Capacity}", trueCapacity);
         }
 
         public MessageStore(uint capacity)
             : this(capacity, offset: 0)
         {
+        }
+
+        /// <summary>
+        /// Returns the actual capacity of the message store.
+        /// </summary>
+        public int Capacity
+        {
+            get { return (int) (_fragmentSize*_fragments.Length); }
         }
 
         // only for testing purposes

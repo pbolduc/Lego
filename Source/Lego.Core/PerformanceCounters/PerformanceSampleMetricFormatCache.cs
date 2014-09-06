@@ -26,7 +26,8 @@ namespace Lego.PerformanceCounters
 
         private string FormatKey(PerformanceSample sample)
         {
-            return string.Format(@"{0}|{1}|{2}|{3}|{4}", sample.Machine, sample.CounterSet, sample.CounterName, sample.Instance, sample.Index);
+            // TODO: is there a better way to do this?
+            return string.Join("|", sample.Machine, sample.CounterSet, sample.CounterName, sample.Instance, sample.Index);
         }
     }
 }

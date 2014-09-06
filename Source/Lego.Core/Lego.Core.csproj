@@ -82,8 +82,13 @@
     <Compile Include="Extensions\Int32Extensions.cs" />
     <Compile Include="Extensions\RegexExtensions.cs" />
     <Compile Include="Graphite\Graphite.cs" />
-    <Compile Include="Graphite\GraphiteMetricsReporter.cs" />
+    <Compile Include="Graphite\GraphiteConfiguration.cs" />
+    <Compile Include="Graphite\GraphiteMessage.cs" />
+    <Compile Include="Graphite\GraphitePublisher.cs" />
+    <Compile Include="Graphite\GraphitePublisherConfiguration.cs" />
+    <Compile Include="Graphite\GraphiteReporter.cs" />
     <Compile Include="Graphite\IGraphite.cs" />
+    <Compile Include="Graphite\IGraphitePublisher.cs" />
     <Compile Include="Messaging\MessageStore.cs" />
     <Compile Include="Messaging\MessageStoreResult.cs" />
     <Compile Include="Messaging\Volatile.cs" />
@@ -94,7 +99,6 @@
     <Compile Include="PerformanceCounters\ICounterSetSource.cs" />
     <Compile Include="PerformanceCounters\IPerformanceSampleMetricFormatCache.cs" />
     <Compile Include="PerformanceCounters\IPerformanceSampleMetricFormatter.cs" />
-    <Compile Include="PerformanceCounters\Metric.cs" />
     <Compile Include="PerformanceCounters\NullPerformanceSampleMetricFormatCache.cs" />
     <Compile Include="PerformanceCounters\PerformanceMonitorSettingsSource.cs" />
     <Compile Include="PerformanceCounters\PerformanceSampleMetricFormatCache.cs" />
@@ -102,10 +106,6 @@
     <Compile Include="PerformanceCounters\SamplingCounterSet.cs" />
     <Compile Include="PerformanceCounters\SamplingCounterSetExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reporters\AbstractGraphiteReporter.cs" />
-    <Compile Include="Reporters\GraphiteReporterConfiguration.cs" />
-    <Compile Include="Reporters\IGraphiteReporter.cs" />
-    <Compile Include="Reporters\GraphiteReporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Sockets;
 
 namespace Lego.Graphite
 {
@@ -8,9 +9,9 @@ namespace Lego.Graphite
     public interface IGraphite : IDisposable
     {
         /// <summary>
-        /// Connects this instance.
+        /// Connects to the Graphite server.
         /// </summary>
-        /// <exception cref=""></exception>
+        /// <exception cref="SocketException"></exception>
         void Connect();
 
         /// <summary>
@@ -19,6 +20,7 @@ namespace Lego.Graphite
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <param name="timestamp"></param>
+        /// <exception cref="SocketException"></exception>
         void Send(string name, string value, long timestamp);
 
         /// <summary>
@@ -27,10 +29,10 @@ namespace Lego.Graphite
         void Close();
 
         /// <summary>
-        /// Gets the number of failures.
+        /// Gets the number of send failures since the last successful send.
         /// </summary>
         /// <value>
-        /// The number of failures.
+        /// The number of send failures.
         /// </value>
         int Failures { get; }
     }

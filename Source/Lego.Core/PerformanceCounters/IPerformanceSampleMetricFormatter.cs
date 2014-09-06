@@ -1,9 +1,10 @@
+using Lego.Graphite;
 using Tx.Windows;
 
 namespace Lego.PerformanceCounters
 {
     public interface IPerformanceSampleMetricFormatter
     {
-        Metric Get(PerformanceSample sample);
+        GraphiteMessage Get(PerformanceSample sample);
     }
 }

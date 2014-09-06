@@ -1,5 +1,6 @@
 using System.Text;
 using Lego.Extensions;
+using Lego.Graphite;
 using Tx.Windows;
 
 namespace Lego.PerformanceCounters
@@ -13,14 +14,14 @@ namespace Lego.PerformanceCounters
             _cache = cache;
         }
 
-        public Metric Get(PerformanceSample sample)
+        public GraphiteMessage Get(PerformanceSample sample)
         {
-            Metric metric = new Metric();
-            metric.Name = GetKey(sample);
-            metric.Value = sample.Value;
-            metric.UnixTime = sample.Timestamp.ToUnixTime();
+            GraphiteMessage message = new GraphiteMessage();
+            message.Path = GetKey(sample);
+            message.Value = sample.Value;
+            message.Timestamp = sample.Timestamp.ToUnixTime();
 
-            return metric;
+            return message;
         }
 
         protected virtual string GetKey(PerformanceSample sample)

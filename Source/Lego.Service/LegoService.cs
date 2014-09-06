@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Lego.Configuration;
+using Lego.Graphite;
 using Lego.PerformanceCounters;
-using Lego.Reporters;
 using Topshelf;
 using Tx.Windows;
 
@@ -13,13 +13,13 @@ namespace Lego.Service
         private List<IDisposable> _subscriptions = new List<IDisposable>();
         private CounterSetSourceCollection _counterSetSources;
         private IPerformanceSampleMetricFormatter _formatter;
-        private IGraphiteReporter _reporter;
+        private IGraphitePublisher _publisher;
 
-        public LegoService(IGraphiteReporter reporter, 
+        public LegoService(IGraphitePublisher publisher, 
             IConfigurationProvider<CounterSetSourceCollection> counterSetProvider,
             IPerformanceSampleMetricFormatter formatter)
         {
-            _reporter = reporter;
+            _publisher = publisher;
             _counterSetSources = counterSetProvider.GetConfiguration();
             _formatter = formatter;
         }
@@ -49,7 +49,7 @@ namespace Lego.Service
 
         private void CounterAdded(PerformanceSample sample)
         {
-            _reporter.Publish(_formatter.Get(sample));
+            _publisher.Publish(_formatter.Get(sample));
         }
 
         private IEnumerable<SamplingCounterSet> GetSamplingCounterSets()

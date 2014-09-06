@@ -8,12 +8,12 @@ namespace Lego.Graphite
     /// <summary>
     /// Metrics reporter that writes to Graphite.
     /// </summary>
-    public class GraphiteMetricsReporter : Metrics.Reporters.Reporter
+    public class GraphiteReporter : Metrics.Reporters.Reporter
     {
         private IGraphite _graphite;
         private long _unixTimestamp;
 
-        public GraphiteMetricsReporter(IGraphite graphite)
+        public GraphiteReporter(IGraphite graphite)
         {
             if (graphite == null)
             {
@@ -23,8 +23,9 @@ namespace Lego.Graphite
             _graphite = graphite;
         }
 
-        protected IGraphite Graphite { get { return _graphite; } }
-        protected long UnixTimestamp { get { return _unixTimestamp; } }
+        private IGraphite Graphite { get { return _graphite; } }
+
+        private long UnixTimestamp { get { return _unixTimestamp; } }
 
         protected override void StartReport()
         {
@@ -81,6 +82,7 @@ namespace Lego.Graphite
 
         protected override void ReportHealth(HealthStatus status)
         {
+            /* not supported */
         }
 
         private string FormatName(string name, string suffix)

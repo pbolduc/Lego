@@ -60,7 +60,7 @@ namespace Lego.Tests
 
             IGraphite graphite = graphiteMock.Object;
 
-            GraphiteMetricsReporter metricsReporter = new GraphiteMetricsReporter(graphite);
+            GraphiteReporter metricsReporter = new GraphiteReporter(graphite);
 
             CreateMetrics();
             Metric.Config.WithReporting(config => config.WithReporter("graphite", () => metricsReporter, TimeSpan.FromSeconds(1)).WithConsoleReport(TimeSpan.FromSeconds(1)));

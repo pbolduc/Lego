@@ -2,12 +2,12 @@
 using System.Collections.Specialized;
 using System.Configuration;
 using Lego.Configuration;
+using Lego.Graphite;
 using Lego.PerformanceCounters;
-using Lego.Reporters;
 
 namespace Lego.Service.Configuration
 {
-    public class AppSettingsGraphiteReporterConfigurationProvider : IConfigurationProvider<GraphiteReporterConfiguration>
+    public class AppSettingsGraphiteReporterConfigurationProvider : IConfigurationProvider<GraphitePublisherConfiguration>
     {
         const string GraphiteHost = "lego:graphite:host";
         const string GraphitePort = "lego:graphite:port";
@@ -15,17 +15,17 @@ namespace Lego.Service.Configuration
         const string MaxMetricCount = "lego:performance-counter:max-send-count";
         const string FlushInterval = "lego:performance-counter:flush-interval";
 
-        public GraphiteReporterConfiguration GetConfiguration()
+        public GraphitePublisherConfiguration GetConfiguration()
         {
             return GetConfiguration(ConfigurationManager.AppSettings);
         }
 
-        private GraphiteReporterConfiguration GetConfiguration(NameValueCollection settings)
+        private GraphitePublisherConfiguration GetConfiguration(NameValueCollection settings)
         {
-            GraphiteReporterConfiguration configuration = new GraphiteReporterConfiguration();
+            GraphitePublisherConfiguration configuration = new GraphitePublisherConfiguration();
 
             configuration.BufferSize = Int32.Parse(settings[BufferSize]);
-            configuration.MaxMetricCount = Int32.Parse(settings[MaxMetricCount]);
+            configuration.MaxMessageCount = Int32.Parse(settings[MaxMetricCount]);
             configuration.FlushInterval = TimeSpan.Parse(settings[FlushInterval]);
 
             return configuration;
