@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Lego.Configuration;
 using Lego.Graphite;
 using Lego.PerformanceCounters;
+using Serilog;
 using Topshelf;
 using Tx.Windows;
 
@@ -61,11 +62,13 @@ namespace Lego.Service
                 switch (configurationSource.Type)
                 {
                     case CounterSetSourceType.DataCollectorSet:
+                        Log.Information("Loading performance counter set from {source}, type {type}", configurationSource.Source, configurationSource.Type);
                         source = new DataCollectorSetSource(configurationSource.Source);
                         yield return source.GetSet();
                         break;
 
                     case CounterSetSourceType.PerformanceMonitorSettings:
+                        Log.Information("Loading performance counter set from {source}, type {type}", configurationSource.Source, configurationSource.Type);
                         source = new PerformanceMonitorSettingsSource(configurationSource.Source);
                         yield return source.GetSet();
                         break;

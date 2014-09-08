@@ -22,7 +22,10 @@ namespace Lego.Extensions
         /// </remarks>
         public static long ToUnixTime(this DateTime when)
         {
-            when = new DateTime(when.Year, when.Month, when.Day, when.Hour, when.Minute, when.Second, when.Millisecond, DateTimeKind.Local).ToUniversalTime();
+            if (when.Kind != DateTimeKind.Utc)
+            {
+                when = when.ToUniversalTime();
+            }
 
             var seconds = (when.Ticks - EpochTicks) / TimeSpan.TicksPerSecond;
             return seconds;

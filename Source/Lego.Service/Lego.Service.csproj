@@ -90,7 +90,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\AppSettingsGraphiteConfigurationProvider.cs" />
     <Compile Include="Configuration\AppSettingsGraphiteReporterConfigurationProvider.cs" />
+    <Compile Include="Configuration\CounterSetSourceCollectionProvider.cs" />
     <Compile Include="LegoService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,6 +108,17 @@
       <Project>{30000ea0-baf5-4ad0-9827-9dda9b7ca048}</Project>
       <Name>Lego.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="OS-Counter-Collector-Set-Template.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="OS-Counters.htm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SQL-Counters.htm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

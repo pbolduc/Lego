@@ -1,46 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using System.Threading;
 using Lego.Graphite;
 using Metrics;
-using Metrics.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace Lego.Tests
 {
-    [TestClass]
-    public class TcpClientTests
-    {
-        [TestMethod]
-        public void HostNotFound()
-        {
-            ExpectSocketErrorCode("coffee.local", 1234, SocketError.HostNotFound);
-        }
-
-        [TestMethod]
-        public void ConnectionRefused()
-        {
-            ExpectSocketErrorCode("127.0.0.1", 1234, SocketError.ConnectionRefused);
-        }
-
-        private void ExpectSocketErrorCode(string host, int port, SocketError socketError)
-        {
-            TcpClient sut = new TcpClient();
-
-            try
-            {
-                sut.Connect(host, port);
-                Assert.Fail("Expected SocketErrorCode.{0}", socketError);
-            }
-            catch (SocketException exception)
-            {
-                Assert.AreEqual(exception.SocketErrorCode, socketError);
-            }
-        }
-    }
-
     [TestClass]
     public class GraphiteReporterTests
     {
@@ -49,7 +16,7 @@ namespace Lego.Tests
         {
             var done = new ManualResetEvent(false);
 
-            List<Tuple<string,string,long>> sent = new List<Tuple<string, string, long>>();
+            List<Tuple<string, string, long>> sent = new List<Tuple<string, string, long>>();
 
             var graphiteMock = new Mock<IGraphite>();
             graphiteMock.Setup(g => g.Connect());

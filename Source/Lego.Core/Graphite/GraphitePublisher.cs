@@ -135,8 +135,12 @@ namespace Lego.Graphite
 
             _graphite.Connect();
 
-            foreach (var message in messages)
+            int offset = messages.Offset;
+            int count = offset + messages.Count;
+
+            for (int i = offset; i < count; i++)
             {
+                var message = messages.Array[i];
                 _graphite.Send(message.Path, FormatValue(message.Value), message.Timestamp);
             }
 

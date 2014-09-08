@@ -42,11 +42,11 @@ namespace Lego.Service
         {
             UnityContainer container = new UnityContainer();
 
-            container.RegisterType<IGraphitePublisher, GraphitePublisher>();
             container.RegisterType<IConfigurationProvider<GraphitePublisherConfiguration>, AppSettingsGraphiteReporterConfigurationProvider>();
             container.RegisterType<IConfigurationProvider<GraphiteConfiguration>, AppSettingsGraphiteConfigurationProvider>();
-
             container.RegisterType<IConfigurationProvider<CounterSetSourceCollection>, CounterSetSourceCollectionProvider>();
+
+            container.RegisterType<IGraphitePublisher, GraphitePublisher>();
             container.RegisterType<IPerformanceSampleMetricFormatter, PerformanceSampleMetricFormatter>();
             container.RegisterType<IPerformanceSampleMetricFormatCache, PerformanceSampleMetricFormatCache>();
 
