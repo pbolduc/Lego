@@ -1,63 +1,36 @@
 ﻿using System;
-using Lego.Configuration;
-using Lego.Graphite;
-using Lego.PerformanceCounters;
-using Lego.Service.Configuration;
-using Microsoft.Practices.Unity;
 using Serilog;
-using Serilog.Events;
-using Serilog.Extras.Topshelf;
 using Topshelf;
 
 namespace Lego.Service
 {
+    using IoC;
+    using StructureMap;
+
     class Program
     {
-        private static ILogger Logger = GetLogger();
-        private static IUnityContainer Container = GetContainer();
+        private static LoggerConfiguration LoggerConfiguration = GetLogger();
 
         static void Main(string[] args)
         {
-            AppDomain.CurrentDomain.UnhandledException += (o, ea) => Logger.Fatal("Unhandled exception: {0}", ea.ExceptionObject);
+            AppDomain.CurrentDomain.UnhandledException += (o, ea) => Log.Logger.Fatal("Unhandled exception: {0}", ea.ExceptionObject);
+            IContainer container = new Container(new DefaultRegistry());
 
             HostFactory.Run(x =>
             {
-                x.UseSerilog(Logger);
-                x.Service(() => Container.Resolve<LegoService>());
+                x.UseSerilog(LoggerConfiguration);
+                x.Service(() => container.GetInstance<LegoService>());
             });
         }
 
-        private static ILogger GetLogger()
+        private static LoggerConfiguration GetLogger()
         {
-            ILogger logger = new LoggerConfiguration()
+            var configuration = new LoggerConfiguration()
                 .WriteTo.Trace()
-                .WriteTo.ColoredConsole()
-                .CreateLogger();
+                .WriteTo.ColoredConsole();
 
-            Log.Logger = logger;
-            return logger;
-        }
-
-        private static IUnityContainer GetContainer()
-        {
-            UnityContainer container = new UnityContainer();
-
-            container.RegisterType<IConfigurationProvider<GraphitePublisherConfiguration>, AppSettingsGraphiteReporterConfigurationProvider>();
-            container.RegisterType<IConfigurationProvider<GraphiteConfiguration>, AppSettingsGraphiteConfigurationProvider>();
-            container.RegisterType<IConfigurationProvider<CounterSetSourceCollection>, CounterSetSourceCollectionProvider>();
-
-            container.RegisterType<IGraphitePublisher, GraphitePublisher>();
-            container.RegisterType<IPerformanceSampleMetricFormatter, PerformanceSampleMetricFormatter>();
-            container.RegisterType<IPerformanceSampleMetricFormatCache, PerformanceSampleMetricFormatCache>();
-
-            container.RegisterType<IGraphite, Graphite.Graphite>(new InjectionFactory((c, t, name) =>
-            {
-                var provider = c.Resolve<IConfigurationProvider<GraphiteConfiguration>>();
-                var configuration = provider.GetConfiguration();
-                return new Graphite.Graphite(configuration.Host, configuration.Port);
-            }));
-                       
-            return container;
+            Log.Logger = configuration.CreateLogger();
+            return configuration;
         }
     }
 }
