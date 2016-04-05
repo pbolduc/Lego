@@ -27,9 +27,8 @@ namespace Lego.Extensions
                 when = when.ToUniversalTime();
             }
 
-            var seconds = (when.Ticks - EpochTicks) / TimeSpan.TicksPerSecond;
-            return seconds;
+            var seconds = new TimeSpan(when.Ticks - EpochTicks).TotalSeconds;
+            return Convert.ToInt64(seconds);
         }
-
     }
 }

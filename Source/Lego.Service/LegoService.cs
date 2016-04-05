@@ -9,6 +9,8 @@ using Tx.Windows;
 
 namespace Lego.Service
 {
+    using Topshelf.Runtime.Windows;
+
     public class LegoService : ServiceControl
     {
         private List<IDisposable> _subscriptions = new List<IDisposable>();

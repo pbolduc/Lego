@@ -1,27 +1,24 @@
-using System.Collections.Generic;
 using Tx.Windows;
 
 namespace Lego.PerformanceCounters
 {
+    using System.Runtime.Caching;
+
     public class PerformanceSampleMetricFormatCache : IPerformanceSampleMetricFormatCache
     {
-        private Dictionary<string, string> _cache;
-
-        public PerformanceSampleMetricFormatCache()
-        {
-            _cache = new Dictionary<string, string>();
-        }
-
         public bool TryGetKey(PerformanceSample sample, out string key)
         {
+            MemoryCache cache = MemoryCache.Default;
             string lookupkey = FormatKey(sample);
-            return _cache.TryGetValue(lookupkey, out key);
+            key = (string)cache.Get(lookupkey);
+            return key != null;
         }
 
         public void Add(PerformanceSample sample, string key)
         {
+            MemoryCache cache = MemoryCache.Default;
             string lookupkey = FormatKey(sample);
-            _cache[lookupkey] = key;
+            cache.Add(lookupkey, key, null);
         }
 
         private string FormatKey(PerformanceSample sample)

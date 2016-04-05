@@ -1,8 +1,10 @@
-﻿using System;
-using System.Net.Sockets;
+﻿
 
 namespace Lego.Graphite
 {
+    using System;
+    using System.Net.Sockets;
+
     /// <summary>
     /// 
     /// </summary>

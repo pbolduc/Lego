@@ -30,12 +30,12 @@ namespace Lego.Graphite
         {
             if (configurationProvider == null)
             {
-                throw new ArgumentNullException("configurationProvider");
+                throw new ArgumentNullException(nameof(configurationProvider));
             }
 
             if (graphite == null)
             {
-                throw new ArgumentNullException("graphite");
+                throw new ArgumentNullException(nameof(graphite));
             }
 
             var configuration = configurationProvider.GetConfiguration();
@@ -52,7 +52,7 @@ namespace Lego.Graphite
         {
             if (message == null)
             {
-                throw new ArgumentNullException("message");
+                throw new ArgumentNullException(nameof(message));
             }
 
             _messageStore.Add(message);

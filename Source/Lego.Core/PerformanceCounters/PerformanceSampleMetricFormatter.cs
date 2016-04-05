@@ -1,26 +1,38 @@
-using System.Text;
-using Lego.Extensions;
-using Lego.Graphite;
-using Tx.Windows;
 
 namespace Lego.PerformanceCounters
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using Lego.Extensions;
+    using Lego.Graphite;
+    using Tx.Windows;
+
     public class PerformanceSampleMetricFormatter : IPerformanceSampleMetricFormatter
     {
         private readonly IPerformanceSampleMetricFormatCache _cache;
+        private static readonly Dictionary<string,string> WellKnownCounterNames;
+
+        static PerformanceSampleMetricFormatter()
+        {
+            WellKnownCounterNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            WellKnownCounterNames.Add("Avg. Disk sec/Read", "disk_seconds_per_read.average");
+        }
 
         public PerformanceSampleMetricFormatter(IPerformanceSampleMetricFormatCache cache)
         {
+            // 
             _cache = cache;
         }
 
         public GraphiteMessage Get(PerformanceSample sample)
         {
-            GraphiteMessage message = new GraphiteMessage();
-            message.Path = GetKey(sample);
-            message.Value = sample.Value;
-            message.Timestamp = sample.Timestamp.ToUnixTime();
+            // PerformanceSample comes back as local time, but the Kind = DateTimeKind.Utc
+            DateTime timestamp = sample.Timestamp;
+            timestamp = new DateTime(timestamp.Year, timestamp.Month, timestamp.Day, timestamp.Hour, timestamp.Minute, timestamp.Second, timestamp.Millisecond, DateTimeKind.Local);
 
+            string path = GetKey(sample);
+            GraphiteMessage message = new GraphiteMessage(path, sample.Value, timestamp);
             return message;
         }
 
@@ -55,11 +67,17 @@ namespace Lego.PerformanceCounters
 
         private static string CleanCounterSet(string counterSet)
         {
-            return StandardClean(counterSet);
+                return StandardClean(counterSet);
         }
 
         private static string CleanCounterName(string counterName)
         {
+            string cleanName;
+            if (WellKnownCounterNames.TryGetValue(counterName, out cleanName))
+            {
+                return cleanName;
+            }
+
             return counterName
                 .ReplaceRegex("^%\\s+", "percent ")
                 .ReplaceRegex("(?i)/sec$", " per_sec")

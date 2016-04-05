@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Lego.Service</RootNamespace>
     <AssemblyName>Lego.Service</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -36,12 +36,16 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Metrics, Version=0.2.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Metrics.NET-net40.0.2.15\lib\net40\Metrics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.1.5.11\lib\net45\Serilog.dll</HintPath>
+      <HintPath>..\packages\Serilog.1.5.14\lib\net45\Serilog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Serilog.FullNetFx, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.1.5.11\lib\net45\Serilog.FullNetFx.dll</HintPath>
+      <HintPath>..\packages\Serilog.1.5.14\lib\net45\Serilog.FullNetFx.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="StructureMap, Version=3.1.6.186, Culture=neutral, processorArchitecture=MSIL">
@@ -67,8 +71,8 @@
       <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-PlatformServices.2.3\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
@@ -84,12 +88,12 @@
       <HintPath>..\packages\Topshelf.Serilog.3.2.0\lib\net40-full\Topshelf.Serilog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Tx.Core, Version=1.0.50917.0, Culture=neutral, PublicKeyToken=3d3a4b0768c9178e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Tx.Core.1.0.50917\lib\Net45\Tx.Core.dll</HintPath>
+    <Reference Include="Tx.Core, Version=1.0.60312.0, Culture=neutral, PublicKeyToken=3d3a4b0768c9178e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Tx.Core.1.0.60312\lib\Net45\Tx.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Tx.Windows, Version=1.0.50917.0, Culture=neutral, PublicKeyToken=3d3a4b0768c9178e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Tx.Windows.1.0.50917\lib\Net45\Tx.Windows.dll</HintPath>
+    <Reference Include="Tx.Windows, Version=1.0.60312.0, Culture=neutral, PublicKeyToken=3d3a4b0768c9178e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Tx.Windows.1.0.60312\lib\Net45\Tx.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

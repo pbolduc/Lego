@@ -39,7 +39,7 @@ namespace Lego.Graphite
 
             if (port < IPEndPoint.MinPort || IPEndPoint.MaxPort < port)
             {
-                throw new ArgumentOutOfRangeException("port");
+                throw new ArgumentOutOfRangeException(nameof(port));
             }
 
             _hostname = hostname;
@@ -76,8 +76,8 @@ namespace Lego.Graphite
         /// <exception cref="System.InvalidOperationException">Not connected</exception>
         public void Send(string name, string value, long timestamp)
         {
-            if (name == null) throw new ArgumentNullException("name");
-            if (value == null) throw new ArgumentNullException("value");
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (value == null) throw new ArgumentNullException(nameof(value));
             if (_writer == null) throw new InvalidOperationException("Not connected");
 
             try

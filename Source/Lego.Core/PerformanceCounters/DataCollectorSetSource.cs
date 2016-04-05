@@ -16,7 +16,7 @@ namespace Lego.PerformanceCounters
         {
             if (string.IsNullOrEmpty(filename))
             {
-                throw new ArgumentException("Filename cannot be null or empty.", "filename");
+                throw new ArgumentException("Filename cannot be null or empty.", nameof(filename));
             }
 
             _filename = filename;
@@ -51,7 +51,7 @@ namespace Lego.PerformanceCounters
                     {
                         case "SampleInterval":
                             reader.Read();
-                            samplingRate = TimeSpan.FromSeconds(Double.Parse(reader.Value));
+                            samplingRate = TimeSpan.FromSeconds(double.Parse(reader.Value));
                             break;
 
                         case "Counter":

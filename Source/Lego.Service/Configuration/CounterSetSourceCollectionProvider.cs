@@ -10,16 +10,22 @@ namespace Lego.Service.Configuration
             CounterSetSourceCollection configuration = new CounterSetSourceCollection();
 
             var source = new CounterSetSource();
-            source.Name = "1";
-            source.Type = CounterSetSourceType.DataCollectorSet;
-            source.Source = @"OS-Counter-Collector-Set-Template.xml";
-            configuration.Add(source);
+            //source.Name = "1";
+            //source.Type = CounterSetSourceType.DataCollectorSet;
+            //source.Source = @"OS-Counter-Collector-Set-Template.xml";
+            //configuration.Add(source);
 
             //source = new CounterSetSource();
             //source.Name = "2";
             //source.Type = CounterSetSourceType.PerformanceMonitorSettings;
             //source.Source = @"SQL-Counters.htm";
             //configuration.Add(source);
+
+            source = new CounterSetSource();
+            source.Name = "2";
+            source.Type = CounterSetSourceType.PerformanceMonitorSettings;
+            source.Source = @"OS-Counters.htm";
+            configuration.Add(source);
 
             return configuration;
         }
